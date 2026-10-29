@@ -1,0 +1,5 @@
+/* One icon definition for every room, independent of the page's gem styles. */
+.game-list .nav-gem{flex:none}
+.game-list .nav-gem::before{content:"";box-sizing:border-box;display:block;width:19px;height:19px;border:0;border-radius:0;background:#50beb7;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.game-list .merge-gem::before{width:20px;height:20px;background:#ed7d78}
+.game-list .go-gem::before{width:25px;height:25px;background:#bd985d;border:2px solid #886f48;border-radius:50%;clip-path:none}
