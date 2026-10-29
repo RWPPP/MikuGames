@@ -23,7 +23,7 @@ window.CharacterSprites = {
           groups.push(queue);
         }
         const largest=Math.max(1,...groups.map(g=>g.length)), keep=new Uint8Array(w*h);
-        for(const g of groups) if(g.length>=largest*.012) for(const i of g)keep[i]=1;
+        for(const g of groups) if(g.length>=largest*.05) for(const i of g)keep[i]=1;
         // Keep antialiasing adjacent to the retained silhouette at full resolution.
         let left=w,top=h,right=0,bottom=0; const points=[];
         for(let y=0;y<h;y++)for(let x=0;x<w;x++) {
@@ -57,3 +57,4 @@ window.CharacterSprites = {
       -sprite.width*s/2-offset.x,-sprite.height*s/2-offset.y,sprite.width*s,sprite.height*s);ctx.restore();
   }
 };
+
