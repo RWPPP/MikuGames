@@ -17,7 +17,19 @@ TriVryad-android-project.zip — проект Android Studio. Внутри на�
 - app/src/main/java/ru/kotik/trivryad/MainActivity.java — Android-экран с WebView.
 - app/src/main/AndroidManifest.xml — настройки запуска приложения.
 - app/build.gradle, build.gradle, settings.gradle и gradle.properties — конфигурация сборки.
+Бесконечная match-3 игра для Android и браузера. Собирай комбинации из трёх и более фишек; когда ходов нет, поле перемешивается.
 
-## Сборка APK
+## Играть в браузере
+
+Сайт: https://rwppp.github.io/MikuGames/
+
+Веб-версия рассчитана в первую очередь на десктоп. Исходники сайта находятся в папке web/ ветки web-games. Сайт публикуется через GitHub Pages.
+
+## Android-проект
+
+TriVryad-android-project.zip содержит полный проект Android Studio: исходный код игры, WebView-экран и настройки Gradle.
 
 GitHub Actions собирает debug APK, когда в main меняется архив TriVryad-android-project.zip или workflow .github/workflows/build-apk.yml. Веб-файлы не запускают пересборку APK. Workflow также можно запустить вручную через Actions → Build Android APK → Run workflow. Готовый артефакт TriVryad-debug-apk хранится 14 дней; сам APK в Git не добавляется.
+## Скачать APK
+
+GitHub Actions собирает debug APK при изменении Android-архива TriVryad-android-project.zip или workflow .github/workflows/build-apk.yml в ветке main. Изменения README и сайта Android-сборку не запускают. Её также можно запустить вручную через Actions → Build Android APK → Run workflow. Готовый артефакт TriVryad-debug-apk хранится 14 дней.
