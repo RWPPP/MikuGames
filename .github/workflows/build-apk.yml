@@ -3,6 +3,9 @@ name: Build Android APK
 on:
   push:
     branches: [main]
+    paths:
+      - "TriVryad-android-project.zip"
+      - ".github/workflows/build-apk.yml"
   workflow_dispatch:
 
 permissions:
