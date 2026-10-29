@@ -1,21 +1,17 @@
 # Три в ряд
 
-Простая бесконечная игра «три в ряд» для Android. Собирай комбинации из трёх и более фишек, набирай очки и продолжай игру без ограничения по времени. Если возможных ходов не осталось, поле автоматически перемешивается.
+Бесконечная match-3 игра для Android и браузера. Собирай комбинации из трёх и более фишек; когда ходов нет, поле перемешивается.
 
-## Что лежит в репозитории
+## Играть в браузере
 
-- `TriVryad-android-project.zip` — архив с полным проектом Android Studio. Внутри находятся исходный код приложения, игровая страница и файлы сборки Gradle.
-- `.github/workflows/build-apk.yml` — GitHub Actions workflow для автоматической сборки APK.
-- `README.md` — описание игры и файлов проекта.
+Сайт: https://rwppp.github.io/MikuGames/
 
-## Как устроен проект внутри архива
+Веб-версия рассчитана в первую очередь на десктоп. Исходники сайта находятся в папке web/ ветки web-games. Сайт публикуется через GitHub Pages.
 
-- `app/src/main/assets/index.html` — интерфейс и логика игры: поле, фишки, комбинации, счёт и перемешивание.
-- `app/src/main/java/ru/kotik/trivryad/MainActivity.java` — Android-экран, который открывает игру во встроенном WebView.
-- `app/src/main/AndroidManifest.xml` — настройки запуска приложения.
-- `app/build.gradle`, `build.gradle` и `settings.gradle` — конфигурация Android и Gradle.
-- `gradle.properties` — параметры Gradle.
+## Android-проект
 
-## Сборка APK
+TriVryad-android-project.zip содержит полный проект Android Studio: исходный код игры, WebView-экран и настройки Gradle.
 
-Workflow запускается при каждом push в ветку `main`. Он распаковывает проект, собирает debug APK и сохраняет его в артефакт `TriVryad-debug-apk` на 14 дней. APK можно скачать на странице запуска во вкладке **Actions**. Сам APK в репозитории не хранится.
+## Скачать APK
+
+GitHub Actions собирает debug APK при изменении Android-архива TriVryad-android-project.zip или workflow .github/workflows/build-apk.yml в ветке main. Изменения README и сайта Android-сборку не запускают. Её также можно запустить вручную через Actions → Build Android APK → Run workflow. Готовый артефакт TriVryad-debug-apk хранится 14 дней.
