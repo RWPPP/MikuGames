@@ -20,8 +20,8 @@ button:focus-visible{outline:3px solid #53bdb4;outline-offset:3px}
 .brand-name{font-weight:780;font-size:17px;letter-spacing:-.5px}
 .nav-label,.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.8px;font-weight:800;color:#a1a4a8}
 .nav-label{padding:0 10px 12px}
-.game-list{display:grid;gap:8px}.game-nav{border:0;text-align:left;text-decoration:none;color:inherit;display:flex;align-items:center;gap:12px;padding:11px;border-radius:16px;background:#e9f4f1;cursor:pointer}
-.nav-gem{width:38px;height:38px;border-radius:12px;background:#fff;display:grid;place-items:center}
+.game-list{display:grid;gap:8px}.game-nav{border:0;text-align:left;text-decoration:none;color:inherit;display:flex;align-items:center;gap:12px;padding:11px;border-radius:16px;background:transparent;cursor:pointer}.game-nav:hover{background:#eeeee8}.game-nav.active{background:#e9f4f1}
+.nav-gem{width:38px;height:38px;border-radius:12px;background:#fff;display:grid;place-items:center}.nav-gem:before{content:"";width:19px;height:19px;background:var(--aqua);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}.merge-gem:before{width:20px;height:20px}.go-gem:before{width:22px;height:22px;background:#bd985d;border:2px solid #886f48;border-radius:50%;clip-path:none}
 .nav-gem:before{content:"";width:19px;height:19px;background:var(--aqua);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}.merge-gem:before{width:20px;height:20px;background:var(--aqua);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
 .nav-title{font-size:13px;font-weight:750}.nav-status{display:block;color:#75a6a0;font-size:10px;margin-top:2px}
 .library-note{margin-top:18px;padding:15px 13px;border:1px dashed #dadbd4;border-radius:15px;color:#8c9198;font-size:12px;line-height:1.5}
@@ -113,8 +113,12 @@ main{min-width:0;padding:0 2px 12px}
         <span class="nav-gem merge-gem" aria-hidden="true"></span>
         <span><span class="nav-title">Слияние звёзд</span><span class="nav-status">Играть</span></span>
       </a>
+      <a class="game-nav" href="go.html">
+        <span class="nav-gem go-gem" aria-hidden="true"></span>
+        <span><span class="nav-title">Го</span><span class="nav-status">Играть</span></span>
+      </a>
     </nav>
-    <div class="library-note">Сейчас доступны две игры. Новые появятся здесь.</div>
+    <div class="library-note">Сейчас доступны три игры. Новые появятся здесь.</div>
     <div class="sidebar-spacer"></div>
     <div class="sidebar-foot">Небольшие игры.<br>Большие перерывы.</div>
   </aside>
