@@ -3,3 +3,6 @@
 .game-list .nav-gem::before{content:"";box-sizing:border-box;display:block;width:19px;height:19px;border:0;border-radius:0;background:#50beb7;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
 .game-list .merge-gem::before{width:20px;height:20px;background:#ed7d78}
 .game-list .go-gem::before{width:25px;height:25px;background:#bd985d;border:2px solid #886f48;border-radius:50%;clip-path:none}
+
+.game-list .trap-gem::before{width:23px;height:23px;background:#a8ba83;border:2px solid #869b64;border-radius:4px;clip-path:polygon(50% 0,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%)}
+@media(max-width:880px){.sidebar .game-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%}.sidebar{grid-template-columns:1fr!important;gap:10px}.sidebar .game-nav{justify-self:stretch;min-width:0;gap:6px;padding:7px 5px}.sidebar .nav-title{font-size:10px}.sidebar .brand{padding-bottom:0}}@media(max-width:520px){.sidebar .game-list{grid-template-columns:repeat(2,minmax(0,1fr))}.sidebar .nav-title{font-size:11px}.sidebar .game-nav{padding:7px 8px;gap:8px}}
