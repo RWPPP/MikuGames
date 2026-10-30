@@ -12,7 +12,7 @@ const attributes={},button={setAttribute(k,v){attributes[k]=v},addEventListener(
 const audio=new sandbox.window.GoAudio(button);
 audio.play('place');assert.equal(notes,0);assert.equal(contexts,0);assert.equal(attributes['aria-pressed'],'false');
 click();assert.equal(storage.get('go-sound'),'1');assert.equal(attributes['aria-pressed'],'true');assert.ok(notes>0);
-const before=notes;for(const sound of ['place','capture','pass','invalid','win','loss'])audio.play(sound);
+const before=notes;for(const sound of ['place','capture','pass','invalid','win','loss','bounce','jump','drop','sand','roll'])audio.play(sound);
 assert.ok(notes>before);assert.equal(contexts,1,'Reuse the same context for player and computer sounds');
 click();const muted=notes;audio.play('capture');audio.play('win');assert.equal(notes,muted);assert.equal(audio.master.gain.value,0,'Mute also stops the output of already scheduled sounds');assert.equal(storage.get('go-sound'),'0');
 console.log('PASS: Go audio, all game sounds, saved preference, context reuse, immediate mute.');
