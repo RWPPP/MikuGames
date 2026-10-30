@@ -26,7 +26,7 @@ dialog{border:0;border-radius:24px;padding:28px;max-width:min(440px,90vw);color:
 <section class="panel rules"><div class="section-title">Коротко о правилах</div><p>Ставьте камни по очереди <b>на пересечения линий</b>. Камни не двигаются. Если окружить все свободные соседние пересечения группы соперника, она снимается с доски. Нельзя ходить в точку без свободных соседей, если этим ходом никого не захватить, и нельзя сразу повторить прежнюю позицию.</p><p>Два паса подряд завершают партию. Побеждает тот, кто окружил больше территории; территория и камни считаются очками. У белых есть компенсация <b>6,5 очка</b>.</p></section><section class="panel"><div class="section-title">Счёт партии</div><div class="section-sub">Подсчёт территории появится после двух пасов.</div><div class="result show" id="live-score">Пока что партия идёт. Нажмите «Пасовать» два раза, чтобы подсчитать очки.</div></section></aside></div></main></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
 <dialog id="game-result" aria-labelledby="result-title"><h2 id="result-title"></h2><p id="result-detail"></p><div class="buttons"><button class="action-btn" id="review-board">Посмотреть доску</button><button class="action-btn primary" id="result-restart">Новая партия</button></div></dialog>
 <script src="go-audio.js?v=3"></script>
-<script src="sprites.js"></script>
+<script src="sprites.js?v=2"></script>
 <script>
 (()=>{'use strict';
 const audio=new GoAudio(document.getElementById('go-sound'));

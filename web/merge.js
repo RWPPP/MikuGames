@@ -11,7 +11,7 @@ let skin=localStorage.getItem('merge-stars-skin')||'realistic',unlocked=localSto
 let taps=Math.min(10,Number(localStorage.getItem('merge-stars-secret-taps'))||0),sprites=[],labels=names;
 if(!['realistic','chibi','secret','secret-guess'].includes(skin)||skin==='secret'&&!unlocked)skin='realistic';
 let W=0,H=0,walls=[],pieces=[],particles=[],score=0,merges=0,best=Number(localStorage.getItem('merge-stars-best'))||0;
-let current=0,next=1,aim=0,ended=false,loading=true,cooldown=0,sound=false,last=0,accumulator=0,loadId=0;
+let current=0,next=1,aim=0,ended=false,loading=true,cooldown=0,sound=false,loadFailed=false,last=0,accumulator=0,loadId=0;
 const $=id=>document.getElementById(id),clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 function toast(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.remove('show'),1800);}
 function weighted(){const x=Math.random();return x<.55?0:x<.82?1:x<.95?2:3;}
@@ -19,7 +19,14 @@ function source(type){const beach=skin==='secret'||skin==='secret-guess';return 
 function hud(){for(const [id,type] of [['current-icon',current],['next-icon',next]]){$(id).src=!loading&&sprites[type]?sprites[type].url:source(type);$(id).alt=labels[type];$(id).dataset.character=files[type];}$('next-name').textContent=labels[next];$('score').textContent=score.toLocaleString('ru-RU');$('best').textContent=best.toLocaleString('ru-RU');$('merges').textContent=merges;}
 function unlock(){if(unlocked)return;taps=Math.min(10,taps+1);localStorage.setItem('merge-stars-secret-taps',taps);$('secret-progress').textContent='Секретный стиль: '+taps+' / 10';if(taps===10){unlocked=true;localStorage.setItem('merge-stars-secret','1');document.querySelector('option[value="secret"]').hidden=false;$('secret-progress').textContent='Секретный стиль открыт!';toast('Пляжная пасхалка открыта!');}}
 function ladder(){labels=skin==='secret'||skin==='secret-guess'?summerNames:names;$('ladder').replaceChildren();for(let i=names.length-1;i>=0;i--){const item=document.createElement('button');item.type='button';item.className='tier';item.dataset.character=files[i];item.dataset.tier=String(i);item.style.border='0';const thumb=Math.round(22+sizes[i]*.32);item.innerHTML='<img alt="" style="width:'+thumb+'px;height:'+thumb+'px" src="'+source(i)+'"><span>'+labels[i]+'</span>';if(i===2){item.classList.add('miku-unlock');item.setAttribute('aria-label','Мику: нажми 10 раз для пасхалки');item.onclick=unlock;}$('ladder').append(item);}document.querySelector('option[value="secret"]').hidden=!unlocked;$('skin-select').value=skin;$('secret-progress').textContent=unlocked?'Секретный стиль открыт!':'Нажми на Мику в цепочке 10 раз'+(taps?' · '+taps+' / 10':'');hud();}
-async function loadStyle(){const id=++loadId;loading=true;ladder();try{const result=await Promise.all(files.map((_,i)=>CharacterSprites.load(source(i))));if(id!==loadId)return;sprites=result;Array.from($('ladder').children).forEach(item=>item.querySelector('img').src=sprites[Number(item.dataset.tier)].url);$('end-screen').querySelector('img').src=source(2);loading=false;reset();}catch(e){if(id===loadId)toast(e.message);}}
+async function loadStyle(){
+ const id=++loadId;loading=true;loadFailed=false;arena.dataset.state='loading';arena.setAttribute('aria-busy','true');$('load-status').textContent='Загружаем фишки…';ladder();
+ try{
+  const result=await Promise.all(files.map((_,i)=>CharacterSprites.load(source(i))));if(id!==loadId)return;
+  sprites=result;Array.from($('ladder').children).forEach(item=>item.querySelector('img').src=sprites[Number(item.dataset.tier)].url);$('end-screen').querySelector('img').src=source(2);
+  loading=false;arena.dataset.state='ready';arena.setAttribute('aria-busy','false');$('load-status').textContent='Кликни по полю или нажми пробел, чтобы бросить';reset();
+ }catch(e){if(id===loadId){loadFailed=true;arena.dataset.state='error';arena.setAttribute('aria-busy','false');$('load-status').textContent='Не удалось загрузить фишки. Нажми ↻, чтобы повторить.';toast(e.message);}}
+}
 function fit(){const oldW=W,oldH=H,b=arena.getBoundingClientRect();W=b.width;H=b.height;const dpr=devicePixelRatio||1;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);aim=clamp(aim||W/2,80,W-80);Composite.remove(engine.world,walls);walls=[Bodies.rectangle(W/2,H+10,W+100,68,{isStatic:true}),Bodies.rectangle(-25,H/2,56,H*3,{isStatic:true}),Bodies.rectangle(W+25,H/2,56,H*3,{isStatic:true})];Composite.add(engine.world,walls);if(oldW&&oldH)for(const p of pieces)Body.setPosition(p.body,{x:clamp(p.body.position.x/oldW*W,80,W-80),y:p.body.position.y+H-oldH});}
 function create(type,x,y){const sprite=sprites[type],r=sizes[type];
 // A rounded support contour eliminates flat atlas edges in every skin.
@@ -43,6 +50,6 @@ function ballsHover(x,y){return pieces.some(p=>files[p.type]==='kaito'&&Math.hyp
 arena.addEventListener('pointerleave',()=>window.KaitoEgg?.hide());arena.addEventListener('pointermove',point);arena.addEventListener('pointerdown',e=>{if(e.target.closest('.end-card'))return;point(e);drop();});
 window.addEventListener('keydown',e=>{if(e.target.closest('select,button,input'))return;if(e.code==='Space'){e.preventDefault();drop();}if(e.code==='ArrowLeft'||e.code==='ArrowRight'){e.preventDefault();aim=clamp(aim+(e.code==='ArrowLeft'?-20:20),sizes[current]+6,W-sizes[current]-6);}});
 $('skin-select').onchange=e=>{if(e.target.value==='secret'&&!unlocked)return;skin=e.target.value;localStorage.setItem('merge-stars-skin',skin);loadStyle();};
-$('restart').onclick=$('play-again').onclick=()=>{if(!loading)reset();};$('sound').onclick=()=>{sound=!sound;$('sound-state').textContent=sound?'Звук включён':'Звук выключен';$('sound').setAttribute('aria-label',sound?'Выключить звук':'Включить звук');};
+$('restart').onclick=$('play-again').onclick=()=>{if(loadFailed)loadStyle();else if(!loading)reset();};$('sound').onclick=()=>{sound=!sound;$('sound-state').textContent=sound?'Звук включён':'Звук выключен';$('sound').setAttribute('aria-label',sound?'Выключить звук':'Включить звук');};
 new ResizeObserver(fit).observe(arena);fit();loadStyle();requestAnimationFrame(frame);
 })();

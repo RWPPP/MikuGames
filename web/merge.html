@@ -40,7 +40,7 @@ main{min-width:0;padding-bottom:20px}.topbar{display:flex;justify-content:space-
       <section class="play-card" aria-label="Игра Слияние звёзд">
         <div class="play-head"><div><div class="game-name">Мику, Тето и компания</div><div class="game-caption">Бесконечный забег · соединяй одинаковые фишки</div></div></div>
         <div class="stats" aria-live="polite"><div class="stat"><span>Очки</span><strong id="score">0</strong></div><div class="stat"><span>Лучший счёт</span><strong id="best">0</strong></div><div class="stat"><span>Слияния</span><strong id="merges">0</strong></div></div>
-        <div class="arena-frame"><div class="arena" id="arena" aria-label="Поле игры. Нажми, чтобы уронить фишку."><canvas id="game" aria-hidden="true"></canvas><div class="drop-guide">Кликни по полю или нажми пробел, чтобы бросить</div><div class="spin-meter" id="spin-meter" aria-live="polite"></div><div class="arena-shade" id="end-screen"><div class="end-card"><img class="pixel-face" alt=""><h2>Пора передохнуть!</h2><p>Счёт: <strong id="final-score">0</strong>. Сыграем ещё раз?</p><button class="primary-btn" id="play-again" type="button">Новая игра</button></div></div></div></div>
+        <div class="arena-frame"><div class="arena" id="arena" aria-label="Поле игры. Нажми, чтобы уронить фишку."><canvas id="game" aria-hidden="true"></canvas><div class="drop-guide" id="load-status" role="status">Кликни по полю или нажми пробел, чтобы бросить</div><div class="spin-meter" id="spin-meter" aria-live="polite"></div><div class="arena-shade" id="end-screen"><div class="end-card"><img class="pixel-face" alt=""><h2>Пора передохнуть!</h2><p>Счёт: <strong id="final-score">0</strong>. Сыграем ещё раз?</p><button class="primary-btn" id="play-again" type="button">Новая игра</button></div></div></div></div>
         <div class="hint"><span><b>Правило простое:</b> одинаковые фишки сливаются в следующую ступень. Не заполняй поле выше пунктирной линии.</span><span class="current-chip">Сейчас: <img id="current-icon" alt="Мику"></span></div>
       </section>
       <aside class="rail">
@@ -54,7 +54,7 @@ main{min-width:0;padding-bottom:20px}.topbar{display:flex;justify-content:space-
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="vendor/matter.min.js"></script>
-<script src="sprites.js"></script>
-<script src="merge.js?v=4"></script>
+<script src="sprites.js?v=2"></script>
+<script src="merge.js?v=5"></script>
 <script src="site.js?v=1"></script></body>
 </html>
