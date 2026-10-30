@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),S=Sand,audio=window.GameSound;
-const colors=['','#50c8bf','#e87989','#f5cc5b','#4d82d8','#ec9fb7','#a3cb65'],names=['','Мику','Тето','Рин / Лен','Кайто','Лука','Гуми'];
+const colors=['','#50c8bf','#e87989','#f5cc5b','#ec9fb7','#a3cb65','#4d82d8'],names=['','Мику','Тето','Рин / Лен','Лука','Гуми','Кайто'];
 const canvases=[$('human'),$('computer')],contexts=canvases.map(c=>{c.width=240;c.height=400;return c.getContext('2d');}),clock=new S.Clock(90);
 let boards,indices,specs,waits,motions,previous,running=false,last=0,remaining=180,aiClock=0,clearClock=0,dropClock=0,alpha=1,held=false,pointerX=null;
 function spec(i){while(specs.length<=i)specs.push({shape:Math.floor(Math.random()*7),color:1+Math.floor(Math.random()*6)});return specs[i];}
@@ -24,8 +24,8 @@ if(s.piece){const p=s.piece,old=previous[k],y=old&&old.cells===p.cells&&p.y>=old
 $(k?'ai-score':'human-score').textContent=s.score;}const p=boards[0].piece;$('status').textContent=`${Math.max(0,Math.ceil(remaining))} сек · ${p?names[p.color]:'песок осыпается…'} · ${running?(held?'ускоренное падение':'игра идёт'):'пауза'}`;}
 function frame(now){const dt=Math.min(.05,(now-last)/1000||.016);last=now;if(running)alpha=clock.advance(dt,simulate);draw();requestAnimationFrame(frame);}
 const canvas=canvases[0];canvas.style.touchAction='none';canvas.tabIndex=0;
-function mouse(e){const r=canvas.getBoundingClientRect();pointerX=(e.clientX-r.left)/r.width*S.W;if(running)positionMouse();}
-canvas.addEventListener('pointermove',mouse);canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;if(!running)return;e.preventDefault();canvas.focus();canvas.setPointerCapture(e.pointerId);mouse(e);held=true;dropClock=0;});
+function mouse(e){const r=canvas.getBoundingClientRect();pointerX=(e.clientX-r.left)/r.width*S.W;if(running)positionMouse();const p=boards[0].piece,y=(e.clientY-r.top)/r.height*S.H;if(p&&p.color===6&&p.cells.some(([cx,cy])=>pointerX>=p.x+cx*4&&pointerX<p.x+cx*4+4&&y>=p.y+cy*4&&y<p.y+cy*4+4))window.KaitoEgg?.show();else window.KaitoEgg?.hide();}
+canvas.addEventListener('pointerleave',()=>window.KaitoEgg?.hide());canvas.addEventListener('pointermove',mouse);canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;if(!running)return;e.preventDefault();canvas.focus();canvas.setPointerCapture(e.pointerId);mouse(e);held=true;dropClock=0;});
 function release(){held=false;dropClock=0;}
 canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',release);canvas.addEventListener('lostpointercapture',release);window.addEventListener('pointerup',release);
 canvas.addEventListener('contextmenu',e=>{e.preventDefault();control('rotate');});

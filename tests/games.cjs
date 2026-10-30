@@ -2,7 +2,7 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 function environment(){
  const elements=new Map(),storage=new Map();
  const ctx=new Proxy({}, {get:(_,name)=>name==='createLinearGradient'||name==='createRadialGradient'?()=>({addColorStop(){}}):()=>{}});
- function el(id){if(!elements.has(id))elements.set(id,{id,value:'normal',hidden:false,disabled:false,open:false,textContent:'',innerHTML:'',style:{},children:[],classList:{add(){},remove(){},toggle(){}},getContext:()=>ctx,getBoundingClientRect:()=>({width:500,height:550,left:0,top:0}),addEventListener(){},setAttribute(){},querySelector:()=>el('nested'),append(){},replaceChildren(){},showModal(){this.open=true},close(){this.open=false},focus(){}});return elements.get(id);}
+ function el(id){if(!elements.has(id))elements.set(id,{id,value:'normal',hidden:false,disabled:false,open:false,textContent:'',innerHTML:'',style:{},dataset:{},children:[],classList:{add(){},remove(){},toggle(){}},getContext:()=>ctx,getBoundingClientRect:()=>({width:500,height:550,left:0,top:0}),addEventListener(){},setAttribute(){},querySelector:()=>el('nested'),append(){},replaceChildren(){},showModal(){this.open=true},close(){this.open=false},focus(){}});return elements.get(id);}
  const document={getElementById:el,querySelector:()=>el('option'),createElement:()=>el('new'+Math.random())};
  const sandbox={console,document,window:{addEventListener(){}},Image:class{addEventListener(){}},ResizeObserver:class{observe(){}},devicePixelRatio:1,localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,String(v))},setTimeout:fn=>{sandbox.runTimer=fn;return 1},clearTimeout(){},requestAnimationFrame(){},performance:{now:()=>1000}};
  return {sandbox,el};
