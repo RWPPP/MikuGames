@@ -106,8 +106,8 @@ main{min-width:0;padding:0 2px 12px}
 @media(prefers-reduced-motion:reduce){.cell.square-match,.cell.square-match:before,.cell.square-match:after,.cell.square-match .gem{animation-duration:.01ms!important}}
 
 .board-wrap{position:relative}.square-fx{position:absolute;inset:0;z-index:10;pointer-events:none;overflow:visible}.square-ring{position:absolute;width:24px;height:24px;border:5px solid #fff5b5;border-radius:35%;box-shadow:0 0 30px #ffca38,inset 0 0 20px #fff;animation:super-ring .9s ease-out forwards}.square-particle{position:absolute;color:var(--spark);font-size:var(--size);text-shadow:0 0 12px currentColor;animation:super-spark .95s ease-out forwards}.square-label{position:absolute;left:50%;top:38%;white-space:nowrap;font-size:clamp(24px,4vw,42px);font-weight:900;color:#fff4b5;text-shadow:0 3px #b47b21,0 0 30px #ffb326;animation:super-label 1s both}.board-wrap.square-impact{animation:super-impact .4s both}@keyframes super-ring{from{transform:translate(-50%,-50%) scale(.3) rotate(0);opacity:1}to{transform:translate(-50%,-50%) scale(14) rotate(80deg);opacity:0}}@keyframes super-spark{from{transform:translate(-50%,-50%) scale(.4);opacity:1}to{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(220deg) scale(.1);opacity:0}}@keyframes super-label{0%{transform:translate(-50%,20px) scale(.3);opacity:0}20%,65%{transform:translate(-50%,-20px) scale(1.08);opacity:1}100%{transform:translate(-50%,-50px) scale(.95);opacity:0}}@keyframes super-impact{20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-3px)}60%{transform:translate(-2px,1px)}80%{transform:translate(2px,0)}}@media(prefers-reduced-motion:reduce){.square-particle,.square-ring{display:none}.board-wrap.square-impact{animation:none}.square-label{animation:none;transform:translateX(-50%);font-size:24px}}
-</style>
-<link rel="stylesheet" href="navigation.css?v=3">
+.cell.four-match .gem{animation:four-pop .4s ease-out!important}.cell.line-match{background:#c8f5ec;box-shadow:0 0 18px #42e1c3;animation:four-pop .6s}.cell.blast-match{background:#ffe7ad;box-shadow:0 0 25px #ffbb54;animation:four-pop .8s}@keyframes four-pop{35%{transform:scale(1.16);filter:brightness(1.8)}100%{transform:scale(.6);opacity:.1}}@media(prefers-reduced-motion:reduce){.cell.four-match .gem,.cell.line-match,.cell.blast-match{animation:none!important}}</style>
+<link rel="stylesheet" href="navigation.css?v=4">
 </head>
 <body>
 <div class="layout">
@@ -131,8 +131,8 @@ main{min-width:0;padding:0 2px 12px}
         <span><span class="nav-title">Го</span><span class="nav-status">Играть</span></span>
       </a>
     <a class="game-nav" href="trap.html"><span class="nav-gem trap-gem" aria-hidden="true"></span><span><span class="nav-title">Поймай Мику</span><span class="nav-status">Играть</span></span></a>
-</nav>
-    <div class="library-note">Сейчас доступны четыре игры. Новые появятся здесь.</div>
+<a class="game-nav" href="pong.html"><span class="nav-gem pong-gem" aria-hidden="true"></span><span><span class="nav-title">Понг</span><span class="nav-status">Играть</span></span></a><a class="game-nav" href="sand.html"><span class="nav-gem sand-gem" aria-hidden="true"></span><span><span class="nav-title">Песочный тетрис</span><span class="nav-status">Играть</span></span></a><a class="game-nav" href="backgammon.html"><span class="nav-gem bg-gem" aria-hidden="true"></span><span><span class="nav-title">Нарды</span><span class="nav-status">Играть</span></span></a><a class="game-nav" href="checkers.html"><span class="nav-gem checkers-gem" aria-hidden="true"></span><span><span class="nav-title">Шашки</span><span class="nav-status">Играть</span></span></a></nav>
+    <div class="library-note">В библиотеке восемь игр. Новые появятся здесь.</div>
     <div class="sidebar-spacer"></div>
     <div class="sidebar-foot">Небольшие игры.<br>Большие перерывы.</div>
   </aside>
@@ -173,7 +173,7 @@ main{min-width:0;padding:0 2px 12px}
         </section>
         <section class="panel tip">
           <strong>Как играть</strong>
-          Перетащи камень на соседний или выбери два соседних камня кликом.
+          Перетащи камень на соседний или выбери два соседних камня кликом. Три — обычное удаление; четыре — малая вспышка; пять и больше — вся строка или столбец. Квадрат 2 × 2 с вероятностью 30% взрывает область 4 × 4 вокруг себя.
           <br><button class="hint-btn" id="hint" type="button">Показать ход</button>
         </section>
         <a class="panel library-teaser" href="merge.html" style="text-decoration:none;display:block"><strong>Слияние звёзд</strong>Роняй фишки и открывай новых персонажей.</a>
@@ -182,6 +182,7 @@ main{min-width:0;padding:0 2px 12px}
   </main>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="arcade-engines.js?v=1"></script>
 <script>
 (function(){
 'use strict';
@@ -270,12 +271,12 @@ function cheer(size){
 }
 function sleep(ms){return new Promise(function(resolve){setTimeout(resolve,ms);});}
 async function resolve(){
-  var squares=squareMatches();var found=matches();
+  var squares=squareMatches();var effect=Arcade.matchEffects(board);var found=effect.clear;
   if(found.size===0){busy=false;if(!hasMove())reshuffle(true);return;}
   var list=Array.from(found);
-  list.forEach(function(key){var p=key.split(',');var cell=boardEl.querySelector('[data-r="'+p[0]+'"][data-c="'+p[1]+'"]');if(cell){cell.classList.add('matched');if(squares.has(key))cell.classList.add('square-match');}});
+  list.forEach(function(key){var p=key.split(',');var cell=boardEl.querySelector('[data-r="'+p[0]+'"][data-c="'+p[1]+'"]');if(cell){cell.classList.add('matched');if(squares.has(key))cell.classList.add('square-match');if(effect.fours.has(key))cell.classList.add('four-match');if(effect.lines.has(key))cell.classList.add('line-match');if(effect.blasts.has(key))cell.classList.add('blast-match');}});
   score+=list.length*10+squares.size*25; if(score>record){record=score;localStorage.setItem('tri-web-record',String(record));}
-  if(squares.size)squareBurst(squares);updateHud();cheer(squares.size?Math.max(6,list.length):list.length);await sleep(squares.size?1050:260);
+  if(squares.size)squareBurst(squares);if(effect.blasts.size)announce('ВЗРЫВ 4 × 4!');else if(effect.lines.size)announce('ПЯТЬ! Вся линия исчезает!');updateHud();cheer(squares.size?Math.max(6,list.length):list.length);await sleep(squares.size?1050:effect.lines.size?650:effect.fours.size?420:260);
   for(var c=0;c<SIZE;c++){
     var keep=[];for(var r=SIZE-1;r>=0;r--)if(!found.has(r+','+c))keep.push(board[r][c]);
     while(keep.length<SIZE)keep.push(gem(randomType()));
