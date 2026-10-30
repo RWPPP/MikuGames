@@ -24,9 +24,11 @@ const position=JSON.stringify(g.board),choice=g.chooseComputerMove();assert.equa
 // Test the actual fixed-step physics with real Matter, using bounded silhouettes.
 const mergeEnv=environment(),Matter=require('../web/vendor/matter.min.js');
 mergeEnv.sandbox.Matter=Matter;mergeEnv.sandbox.CharacterSprites={load:()=>new Promise(()=>{}),draw(){}};
-let merge=fs.readFileSync('web/merge.js','utf8').replace(/\}\)\(\);\s*$/, 'globalThis.game={create,step,reset,unlock,engine,get pieces(){return pieces},get score(){return score},get ended(){return ended},setSprites(s){sprites=s;loading=false}};})();');
+let merge=fs.readFileSync('web/merge.js','utf8').replace(/\}\)\(\);\s*$/, 'globalThis.game={create,step,reset,unlock,engine,names,files,summerFiles,sizes,get pieces(){return pieces},get score(){return score},get ended(){return ended},setSprites(s){sprites=s;loading=false}};})();');
 vm.runInNewContext(merge,mergeEnv.sandbox);const m=mergeEnv.sandbox.game;
 m.setSprites(Array.from({length:9},()=>({hull:[{x:-.8,y:-1},{x:.7,y:-.9},{x:1,y:.5},{x:0,y:1},{x:-1,y:.6}]})));
+assert.equal(m.files[0],'kaito');assert.equal(m.files[1],'len');assert.equal(m.summerFiles[0],'rei');assert.equal(m.summerFiles[1],'haru');assert.equal(m.names[0],'Кайто');assert.equal(m.names[1],'Лен');assert.equal(m.sizes[0],Math.min(...m.sizes));assert.ok(m.sizes[1]<m.sizes[2]);
+const kaito=m.create(0,100,100),len=m.create(1,200,100),miku=m.create(2,300,100);assert.ok(kaito.r<len.r&&len.r<miku.r);m.reset();
 m.create(0,220,50);m.create(0,225,100);for(let i=0;i<1200;i++)m.step();assert.ok(m.score>0);assert.equal(m.pieces.length,1);
 for(let i=0;i<7;i++)m.create(i,100+i*45,80);for(let i=0;i<1800;i++)m.step();
 for(const p of m.pieces){assert.ok(Number.isFinite(p.body.position.x));assert.ok(Math.abs(p.body.angularVelocity)<=.0451);assert.ok(p.body.bounds.max.y<=527);}

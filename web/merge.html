@@ -18,7 +18,7 @@ main{min-width:0;padding-bottom:20px}.topbar{display:flex;justify-content:space-
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
 .skin-picker{display:flex;align-items:center;gap:9px;margin-top:12px}.skin-picker label{font-size:11px;color:#777f86;font-weight:700}.skin-picker select{min-width:0;flex:1;border:1px solid #e7e7df;border-radius:10px;background:#fbfbf8;color:#303740;padding:9px 10px;font:700 11px system-ui;cursor:pointer}.tier.miku-unlock{cursor:pointer;outline:0}.tier.miku-unlock:hover{background:#eaf6f3;transform:translateY(-2px)}.tier.miku-unlock:focus-visible{outline:2px solid #53bdb4;outline-offset:2px}body.skin-secret .tier img,body.skin-secret .next-box img,body.skin-secret .current-chip img{image-rendering:auto}
-</style>
+.ladder .tier{opacity:1}.ladder .tier[data-character="len"],.ladder .tier[data-character="kaito"]{grid-column:1/-1;flex-direction:row;gap:10px;min-height:44px}.ladder .tier:after{display:none}.ladder .tier[data-character="kaito"]{background:#eaf0f9}.ladder .tier[data-character="len"]{background:#faf3dd}</style>
 <link rel="stylesheet" href="navigation.css?v=4">
 <link rel="stylesheet" href="site.css?v=1"></head>
 <body>
@@ -45,7 +45,7 @@ main{min-width:0;padding-bottom:20px}.topbar{display:flex;justify-content:space-
       </section>
       <aside class="rail">
         <section class="panel"><div class="section-title">Следующая фишка</div><div class="section-sub">Прицел двигай мышью или пальцем по полю.</div><div class="next-row"><div class="next-box"><img id="next-icon" alt="Тето"><span id="next-name">Тето</span></div><div class="sound-note"><span>🎧</span><span id="sound-state">Звук выключен</span></div></div></section>
-        <section class="panel"><div class="section-title">Цепочка слияний</div><div class="section-sub">Две одинаковые превращаются в следующую фишку.</div><div class="ladder" id="ladder"></div></section>
+        <section class="panel"><div class="section-title">Цепочка слияний</div><div class="section-sub">Рост фишек снизу вверх. Кайто — самый маленький, затем Лен.</div><div class="ladder" id="ladder"></div></section>
         <section class="panel"><div class="section-title">Вид фишек</div><div class="section-sub">Цельные силуэты: волосы и аксессуары сохраняют свою форму. Смена стиля начинает новый забег.</div><div class="skin-picker"><label for="skin-select">Стиль</label><select id="skin-select"><option value="realistic">Реалистичные</option><option value="chibi">Чиби</option><option value="secret" hidden>Пляжная пасхалка</option><option value="secret-guess">Летняя коллекция</option></select></div><div class="section-sub" id="secret-progress" aria-live="polite">Нажми на Мику в цепочке 10 раз</div></section>
         <section class="panel howto"><div class="section-title">Как играть</div><p>Нажми на поле, чтобы уронить фишку. Можно целиться мышью, касанием или стрелками. <strong>Пробел</strong> — бросить. Соедини одинаковые фишки, чтобы открыть следующего персонажа и набрать больше очков.</p></section>
       </aside>
@@ -55,6 +55,6 @@ main{min-width:0;padding-bottom:20px}.topbar{display:flex;justify-content:space-
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="vendor/matter.min.js"></script>
 <script src="sprites.js"></script>
-<script src="merge.js?v=3"></script>
+<script src="merge.js?v=4"></script>
 <script src="site.js?v=1"></script></body>
 </html>
