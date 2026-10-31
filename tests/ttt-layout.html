@@ -1,0 +1,6 @@
+<!doctype html><meta charset="utf-8"><pre id="report">RUNNING</pre><iframe id="game" src="../web/tictactoe.html" style="width:1200px;height:1200px"></iframe><script>
+game.onload=()=>{try{const d=game.contentDocument,cells=[...d.querySelectorAll('.ttt-cell')],measure=()=>cells.map(c=>{const r=c.getBoundingClientRect();return [r.width,r.height];});let count=0;
+d.querySelector('#mode').value='two';d.querySelector('#mode').dispatchEvent(new game.contentWindow.Event('change'));
+for(const width of [1200,360]){game.style.width=width+'px';d.querySelector('#restart').click();const initial=measure();const verify=()=>{const now=measure();for(let i=0;i<9;i++)if(Math.abs(now[i][0]-initial[i][0])>.1||Math.abs(now[i][1]-initial[i][1])>.1||Math.abs(now[i][0]-now[i][1])>.1)throw Error('Cell changed size at viewport '+width);count++;};verify();for(const i of [0,3,1,4,2]){cells[i].click();verify();}d.querySelector('#again').click();verify();}
+document.querySelector('#report').textContent='PASS: '+count+' checks, all nine cells stay square and unchanged on desktop/mobile before moves, during play, after win and reset';}catch(e){document.querySelector('#report').textContent='FAIL: '+e.message;}};
+</script>
