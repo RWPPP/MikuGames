@@ -10,7 +10,7 @@ fixtures.set('transparent',pixels(4,4,()=>{}));
 const sandbox={window:{},console,Uint8ClampedArray,Uint32Array,performance:{now:()=>++clock},
  setTimeout(fn,ms){if(ms===0){yields++;return setImmediate(fn);}const id=++nextTimer;timers.set(id,fn);return id;},clearTimeout(id){timers.delete(id);},
  URL:{createObjectURL:()=> 'blob:test-'+nextTimer},
- Image:class{set src(src){decodes++;this.srcName=src;if(src==='timeout')return;queueMicrotask(()=>{const f=fixtures.get(src);if(!f){this.onerror();return;}this.naturalWidth=f.w;this.naturalHeight=f.h;this.data=f.data;this.onload();});}},
+ Image:class{set src(src){decodes++;this.srcName=src;if(src==='timeout')return;queueMicrotask(()=>{const f=fixtures.get(src);if(!f){this.onerror?.();return;}this.naturalWidth=f.w;this.naturalHeight=f.h;this.data=f.data;this.onload?.();});}},
  document:{createElement(){const canvas={width:0,height:0};let image;
   const ctx={drawImage(img){image=img;canvas.srcName=img.srcName;},getImageData(){if(image.srcName==='broken')throw new Error('pixel read failed');return {data:new Uint8ClampedArray(image.data)};},putImageData(p){canvas.cleaned=p.data;}};
   canvas.getContext=()=>ctx;canvas.toBlob=fn=>{if(canvas.srcName==='slow-encoding')finishEncoding=()=>fn({});else queueMicrotask(()=>fn({}));};return canvas;
@@ -23,6 +23,7 @@ vm.runInNewContext(fs.readFileSync('web/sprites.js','utf8'),sandbox);const sprit
  assert.ok(inputRan&&yields>0,'Image preparation must yield to input');assert.equal(decodes,1);
  assert.equal(normal.canvas.width,512);assert.equal(normal.canvas.height,512);assert.equal(normal.left,20);assert.equal(normal.top,10);assert.equal(normal.width,361);assert.equal(normal.height,421);
  assert.equal(normal.canvas.cleaned[3],0,'Remove isolated crop debris');assert.equal(normal.canvas.cleaned[(10*512+19)*4+3],16,'Preserve antialiasing');assert.ok(normal.hull.length>=4);assert.ok(normal.url.startsWith('blob:'));
+ sandbox.window.MergePreviews={remote:'normal'};assert.equal(await sprites.preview('remote'),normal,'Embedded preview must bypass the network URL');
  await sprites.load('normal');assert.equal(decodes,1,'Reopening a style uses cached sprites');
  const fragmented=await sprites.load('fragmented');assert.equal(fragmented.width,767);assert.ok(fragmented.hull.length>=4);
  await assert.rejects(sprites.load('transparent'),/видимого/);

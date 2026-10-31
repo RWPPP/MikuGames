@@ -10,7 +10,7 @@ function environment(){
 const env=environment();
 let go=fs.readFileSync('web/go.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
 go=go.replace(/\}\)\(\);\s*$/, 'globalThis.game={play,pass,reset,score,inspectMove,chooseComputerMove,finish,board,setMode,get current(){return current},get finished(){return finished}};})();');
-const sounds=[];env.sandbox.GoAudio=class{unlock(){}play(kind){sounds.push(kind)}};env.sandbox.CharacterSprites={load:()=>new Promise(()=>{})};vm.runInNewContext(go,env.sandbox);const g=env.sandbox.game;
+const sounds=[];env.sandbox.GoAudio=class{unlock(){}play(kind){sounds.push(kind)}};env.sandbox.CharacterSprites={preview:()=>new Promise(()=>{}),load:()=>new Promise(()=>{})};vm.runInNewContext(go,env.sandbox);const g=env.sandbox.game;
 // Capture an isolated white stone; illegal suicide must leave the board intact.
 g.setMode(false);g.board[1][1]=2;g.board[0][1]=g.board[1][0]=g.board[2][1]=1;
 assert.equal(g.play(2,1),true);assert.equal(g.board[1][1],0);assert.equal(sounds.at(-1),'capture');assert.equal(g.play(1,1),false);assert.equal(sounds.at(-1),'invalid');
@@ -23,7 +23,7 @@ env.el('difficulty').value='hard';g.board[1][1]=1;g.board[0][1]=g.board[1][0]=g.
 const position=JSON.stringify(g.board),choice=g.chooseComputerMove();assert.equal(choice.x,2);assert.equal(choice.y,1);assert.equal(JSON.stringify(g.board),position);
 // Test the actual fixed-step physics with real Matter, using bounded silhouettes.
 const mergeEnv=environment(),Matter=require('../web/vendor/matter.min.js');
-mergeEnv.sandbox.Matter=Matter;mergeEnv.sandbox.CharacterSprites={load:()=>new Promise(()=>{}),draw(){}};
+mergeEnv.sandbox.Matter=Matter;mergeEnv.sandbox.CharacterSprites={preview:()=>new Promise(()=>{}),load:()=>new Promise(()=>{}),draw(){}};
 let merge=fs.readFileSync('web/merge.js','utf8').replace(/\}\)\(\);\s*$/, 'globalThis.game={create,step,reset,unlock,engine,names,files,summerFiles,sizes,get pieces(){return pieces},get score(){return score},get ended(){return ended},setSprites(s){sprites=s;loading=false}};})();');
 vm.runInNewContext(merge,mergeEnv.sandbox);const m=mergeEnv.sandbox.game;
 m.setSprites(Array.from({length:9},()=>({hull:[{x:-.8,y:-1},{x:.7,y:-.9},{x:1,y:.5},{x:0,y:1},{x:-1,y:.6}]})));

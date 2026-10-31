@@ -9,7 +9,7 @@ const pause=()=>new Promise(resolve=>{if(channel){jobs.push(resolve);channel.por
 function decode(src){
   return new Promise((resolve,reject)=>{
     const image=new Image();
-    const timer=setTimeout(()=>{image.onload=image.onerror=null;reject(new Error('Время загрузки картинки истекло'));},15000);
+    const timer=setTimeout(()=>{image.onload=image.onerror=null;image.src='';reject(new Error('Время загрузки картинки истекло'));},15000);
     image.onload=()=>{clearTimeout(timer);resolve(image);};
     image.onerror=()=>{clearTimeout(timer);reject(new Error('Не удалось загрузить '+src));};
     image.src=src;
@@ -71,6 +71,10 @@ async function prepare(image){
   return {canvas,left,top,width,height,hull,scale,preview};
 }
 window.CharacterSprites={
+  preview(src){
+    const embedded=window.MergePreviews?.[src];
+    return this.load(embedded||src);
+  },
   load(src){
     if(cache.has(src))return cache.get(src);
     const pending=decode(src).then(image=>{
