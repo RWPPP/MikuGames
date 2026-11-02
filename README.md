@@ -24,3 +24,5 @@
 ## Сборка APK
 
 GitHub Actions собирает debug APK, когда в `main` меняется архив `TriVryad-android-project.zip` или workflow `.github/workflows/build-apk.yml`. Веб-файлы не запускают пересборку APK. Workflow также можно запустить вручную через **Actions → Build Android APK → Run workflow**. Готовый артефакт `TriVryad-debug-apk` хранится 14 дней; сам APK в Git не добавляется.
+
+Купить мне кофе: https://boosty.to/rwppp
