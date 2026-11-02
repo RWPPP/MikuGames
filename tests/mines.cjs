@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict'),Mines=require('../web/mines-engine.js');let seed=42;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/2**32;};
-for(const config of [[9,9,10],[12,12,24],[16,16,50]])for(const first of [0,8,40,config[0]*config[1]-1])for(let sample=0;sample<10;sample++){
+for(const config of [[9,9,10],[12,12,24],[16,16,50],[24,24,200]])for(const first of [0,8,40,config[0]*config[1]-1])for(let sample=0;sample<10;sample++){
  const g=new Mines(...config,random);assert.equal(g.status,'ready');g.open(first);assert.equal(g.cells.filter(c=>c.mine).length,config[2]);for(const i of [first,...g.neighbors(first)])assert.equal(g.cells[i].mine,false);assert.ok(g.cells[first].open);for(let i=0;i<g.cells.length;i++)assert.equal(g.cells[i].count,g.neighbors(i).filter(n=>g.cells[n].mine).length);
  for(let i=0;i<g.cells.length;i++)if(!g.cells[i].mine)g.open(i);assert.equal(g.status,'won');assert.equal(g.flags,g.mines);const before=g.revealed;g.open(0);g.toggle(0);assert.equal(g.revealed,before);
 }
@@ -8,4 +8,4 @@ function fixture(){const f=new Mines(4,4,1);f.placed=true;f.status='playing';f.c
 const correct=fixture();correct.toggle(0);assert.equal(correct.open(5),true);assert.notEqual(correct.status,'lost');assert.ok(correct.cells[1].open);assert.equal(correct.cells[0].open,false);
 const wrong=fixture();wrong.toggle(1);wrong.open(5);assert.equal(wrong.status,'lost');assert.equal(wrong.exploded,0);
 const blocked=fixture();assert.equal(blocked.open(5),false);assert.equal(blocked.revealed,1);blocked.toggle(0);assert.equal(blocked.toggle(1),false,'Flag limit');assert.notEqual(blocked.status,'won','Flags alone never win');
-console.log('PASS: 120 boards, safe first-click region, exact mine counts, all adjacent numbers, flood/win, loss/lockout, flags before start, chord success and incorrect-flag loss.');
+console.log('PASS: 160 boards, safe first-click region, exact mine counts, all adjacent numbers, flood/win, loss/lockout, flags before start, chord success and incorrect-flag loss.');
